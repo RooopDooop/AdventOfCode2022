@@ -14,7 +14,6 @@ def main():
             elif line[0].split(" ")[0] == "C":
                 opponentInput = "Scissors"
                 
-            #yourInput = ""
             if line[0].split(" ")[1] == "X":
                 #Lose
                 if opponentInput == "Rock":
