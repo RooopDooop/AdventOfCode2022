@@ -3,31 +3,52 @@ class AdventDir:
         self.name = name
         self.numericValue = numericValue
         self.children = children
-    #def findChildren(self, strTarget):
-        #for objChild in self.children:
-            #if objChild.name == strTarget:
-                #print("Found Child: " + objChild.name)
-                #break
-            #else:
-                #objChild.findChildren(strTarget)
+    def findChildren(self):
+        for objChild in self.children:
+            objChild.findChildren()
+
+            #f int(objChild.numericValue) <= 100000:
+            print(objChild.name + " + " + str(objChild.numericValue))
     def findParentAddChild(self, strParent, objChild):
-        print(self.name + " - " + strParent)
         if self.name == strParent:
             self.children.append(objChild)
+            return
         else:
-            for objChild in self.children:
-                objChild.findParentAddChild(strParent, objChild)
+            for objSubChild in self.children:
+                if objSubChild.name == strParent:
+                    objSubChild.findParentAddChild(strParent, objChild)
+                    #print(objChild.name + " - " + objSubChild.name)
+    def fillParentsAndChild(self, treeDirectory, fileSize):
+        #Iterate through all the parents in the tree, add the file size to all of them
+        #finally, add weight to target, which is lowest level directory
 
-    #def addChild(self, objChild):
-        #self.children.append(objChild)
+        self.numericValue += int(fileSize)
+
+        print(self)
+
+        if (len(treeDirectory) == 0):
+            return
+
+        strTree = treeDirectory[0]
+
+        for objSubChild in self.children:
+            if (objSubChild.name == strTree):
+                objSubChild.fillParentsAndChild(treeDirectory[1:], fileSize)
+
+        #self.numericValue += int(fileSize)
+        #for objSubChild in self.children:
+            #for strTree in treeDirectory:
+                #if (objSubChild.name == strTree):
+                   # objSubChild.numericValue += int(fileSize)
+                    #objSubChild.fillParentsAndChild(treeDirectory[1:], fileSize)
+
+                    
 
 def main():
     currentDirectory = []
 
     MainDir = AdventDir
-
-    #allDirectories = dict({})
-    #documentReverseIndex = dict({})
+    print(MainDir)
 
     with open("../inputData.txt", "r") as objFile:
         while True:
@@ -37,6 +58,8 @@ def main():
 
             strLine = line[0]
 
+            #print(currentDirectory)
+
             if strLine[0] == "$":
                 strCommand = strLine.split(" ")[1]
 
@@ -44,53 +67,21 @@ def main():
                     if strLine == "$ cd /":
                         currentDirectory.append(strLine.split(" ")[2])
                         MainDir = AdventDir("/", 0, [])
-
-                        #allDirectories[' '.join(currentDirectory)] = [dict()]
                     elif strLine.split(" ")[2] != "..":
                         currentDirectory.append(strLine.split(" ")[2])
-
-                        #print(str(currentDirectory[len(currentDirectory)-2]))
-                        
-                        print(str(currentDirectory))
                         if len(currentDirectory) == 1:
                             MainDir.findParentAddChild("/", AdventDir(strLine.split(" ")[2], 0, []))
                         else:
                             MainDir.findParentAddChild(currentDirectory[len(currentDirectory)-2], AdventDir(strLine.split(" ")[2], 0, []))
-
-
-                        #allDirectories[strLine.split(" ")[2]] = ' '.join(currentDirectory)
                     else:
                         del currentDirectory[-1]
 
-
-            #else:
-                #if strLine.split(" ")[0] != "dir":
-                    #if currentDirectory[len(currentDirectory)-1] not in documentReverseIndex:
-                    #    documentReverseIndex[currentDirectory[len(currentDirectory)-1]] = int(strLine.split(" ")[0])
-                    #else:
-                    #    documentReverseIndex[currentDirectory[len(currentDirectory)-1]] += int(strLine.split(" ")[0])
-
-    print(MainDir.children)
+            else:
+                if strLine.split(" ")[0] != "dir":
+                    MainDir.fillParentsAndChild(currentDirectory[1:], strLine.split(" ")[0])
 
 
-    #totalSized = dict()
-
-    #for key in allDirectories:
-    #    totalValue = 0
-
-    #    for strTest in str(allDirectories[key]).split(" "):
-    #        if (strTest != "/"):
-    #            if strTest in documentReverseIndex:
-    #                print(str(allDirectories[key]) + " - " + strTest + " - " + str(documentReverseIndex[strTest]))
-
-    #for key in allDirectories:
-    #    if str(allDirectories[key]) in documentReverseIndex:
-    #        if int(documentReverseIndex[str(allDirectories[key])]) <= 100000:
-    #            print(key + " - " + str(allDirectories[key]) + " - Values: " + str(documentReverseIndex[str(allDirectories[key])]))
-
-    #print(str(allDirectories['tpnspw']).split(" "))
-
-    #print(str(documentReverseIndex))
+    MainDir.findChildren()
 
 if __name__ == "__main__":
     main()
