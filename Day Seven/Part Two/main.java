@@ -7,14 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Scanner; 
+import java.util.Scanner;
 
-class SevenOne{  
+class SevenOne{
     static class objDirectory {
         private objDirectory parent = null;
         private int dataSize = 0;
         private final Map<String, objDirectory> children = new HashMap<>();
-    
+
         objDirectory(String name, objDirectory parent) {
             this.parent = parent;
         }
@@ -33,15 +33,15 @@ class SevenOne{
     }
 
     public static void main(String[] args){
-        objDirectory MasterDir = new objDirectory("/", null); 
+        objDirectory MasterDir = new objDirectory("/", null);
         objDirectory currentLocation = MasterDir;
 
         try {
-            List<String> terminalInputs = Files.readAllLines(Path.of("Day Seven/inputData.txt"));
-        
+            List<String> terminalInputs = Files.readAllLines(Path.of("../inputData.txt"));
+
             for (int z = 1; z < terminalInputs.size(); z++) {
                 String terminalInput = terminalInputs.get(z);
-                
+
                 if (terminalInput.toCharArray()[0] == '$') {
                     String command = terminalInput.split(" ")[1];
 
@@ -65,16 +65,12 @@ class SevenOne{
                 }
             }
 
-            int finalAnswer = 0;
-            for (int instanceSize: MasterDir.findSize()) {
-                if (instanceSize <= 100000) {
-                    finalAnswer += instanceSize;
-                }
-            }
-
-            System.out.println("The final answer is: " + finalAnswer);
+            List<Integer> dirSizes = new ArrayList<>(MasterDir.findSize());
+            int freeSpace = (70000000 - MasterDir.dataSize);
+            List<Integer> arrSorted = dirSizes.stream().filter(t -> t > (30000000 - freeSpace)).sorted().toList();
+            System.out.println("The final answer is: " + arrSorted.get(0));
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }  
+    }
 } 
