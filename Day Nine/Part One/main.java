@@ -27,35 +27,37 @@ class EightOne {
                while (Distance > 0) {
                    switch (Direction) {
                        case "U":
-                           headLocationY++;
-
                            tailLocation = tailMove(headLocationY, headLocationX, tailLocation.get(0), tailLocation.get(1));
+                           VisitedLocations.add(tailLocation);
+                           headLocationY++;
                            break;
                        case "R":
-                           headLocationX++;
-
                            tailLocation = tailMove(headLocationY, headLocationX, tailLocation.get(0), tailLocation.get(1));
+                           VisitedLocations.add(tailLocation);
+                           headLocationX++;
                            break;
                        case "D":
-                           headLocationY--;
-
                            tailLocation = tailMove(headLocationY, headLocationX, tailLocation.get(0), tailLocation.get(1));
+                           VisitedLocations.add(tailLocation);
+                           headLocationY--;
                            break;
                        case "L":
-                           headLocationX--;
-
                            tailLocation = tailMove(headLocationY, headLocationX, tailLocation.get(0), tailLocation.get(1));
+                           VisitedLocations.add(tailLocation);
+                           headLocationX--;
                            break;
                        default:
                            System.out.println("UNKNOWN - " + Direction + " - " + Distance);
                    }
 
-                   System.out.println("Head Location: [" + headLocationY + "][" + headLocationX + "] - Tail Location: [" + tailLocation.get(0) + "][" + tailLocation.get(1) + "]");
-                   System.out.println("==============================================================================================");
                    Distance--;
                }
 
+               //System.out.println("Command: " + Movement + " Head Location: [" + headLocationY + "][" + headLocationX + "] - Tail Location: [" + tailLocation.get(0) + "][" + tailLocation.get(1) + "]");
+               //System.out.println("==============================================================================================");
            }
+
+           System.out.println(VisitedLocations.size());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,20 +72,29 @@ class EightOne {
 
         if ((diffY == 0 || diffY == 1) && (diffX == 0 || diffX == 1)) {
             //Nothing is required, return current position
-            System.out.println("Nothing is required");
             return tailPosition;
+        } else {
+            return Arrays.asList(headLocationY, headLocationX);
         }
 
-        List<Integer> TopAvailableDiff = Arrays.asList(((headLocationY+1) - tailLocationY), (headLocationX - tailLocationX));
+        /*List<Integer> TopAvailableDiff = Arrays.asList(((headLocationY+1) - tailLocationY), (headLocationX - tailLocationX));
         List<Integer> BottomAvailableDiff = Arrays.asList(((headLocationY-1) - tailLocationY), (headLocationX - tailLocationX));
         List<Integer> LeftAvailableDiff = Arrays.asList((headLocationY - tailLocationY), ((headLocationX-1) - tailLocationX));
         List<Integer> RightAvailableDiff = Arrays.asList((headLocationY - tailLocationY), ((headLocationX+1) - tailLocationX));
 
-        System.out.println("==============================================================================================");
-        System.out.println(TopAvailableDiff + " - " + BottomAvailableDiff + " - " + LeftAvailableDiff + " - " + RightAvailableDiff);
+        System.out.println("Top: " + TopAvailableDiff + " - Bottom: " + BottomAvailableDiff + " - Left: " + LeftAvailableDiff + " - Right: " + RightAvailableDiff);
+
+        System.out.println(Math.abs(TopAvailableDiff.get(0)) + Math.abs(TopAvailableDiff.get(1)));
+        System.out.println(Math.abs(BottomAvailableDiff.get(0)) + Math.abs(BottomAvailableDiff.get(1)));
+        System.out.println(Math.abs(LeftAvailableDiff.get(0)) + Math.abs(LeftAvailableDiff.get(1)));
+        System.out.println(Math.abs(RightAvailableDiff.get(0)) + Math.abs(RightAvailableDiff.get(1)));*/
+
+
+        //System.out.println("==============================================================================================");
+        //System.out.println(TopAvailableDiff + " - " + BottomAvailableDiff + " - " + LeftAvailableDiff + " - " + RightAvailableDiff);
         //System.out.println("Calculated Diff: " + (TopAvailableDiff.get(0) - tailPosition.get(0)) + " - " + (TopAvailableDiff.get(1) - tailPosition.get(1)));
 
-        if (headLocationY > tailLocationY) {
+        /*if (headLocationY > tailLocationY) {
             while (diffY > 0) {
                 //System.out.println("Tail moving up - Head Location: [" + headLocationY + "][" + headLocationX + "] - Tail Location: [" + tailLocationY + "][" + tailLocationX + "]");
                 //tailLocationY++;
@@ -116,7 +127,7 @@ class EightOne {
                 tailPosition.set(1, tailPosition.get(1) - 1);
                 diffX--;
             }
-        }
+        }*/
 
 
 
@@ -154,7 +165,7 @@ class EightOne {
             }
         }*/
 
-        return tailPosition;
+        //return tailPosition;
     }
 
     private static int tailMove() {
