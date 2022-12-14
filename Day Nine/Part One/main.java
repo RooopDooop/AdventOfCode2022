@@ -18,7 +18,7 @@ class NineOne {
         VisitedLocations.add(Arrays.asList(0,0));
 
         try {
-            List<String> listMovements = new ArrayList<>(Files.readAllLines(Path.of("inputData.txt")));
+            List<String> listMovements = Files.readAllLines(Path.of("inputData.txt"));
 
            for (String Movement: listMovements) {
                String Direction = Movement.split(" " )[0];
