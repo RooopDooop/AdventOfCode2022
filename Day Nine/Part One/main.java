@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 class NineOne {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         //Y, X
         List<Integer> headLocation = Arrays.asList(0, 0);
         List<Integer> tailLocation = Arrays.asList(0, 0);
@@ -17,41 +17,37 @@ class NineOne {
         Set<List<Integer>> VisitedLocations = new HashSet<>();
         VisitedLocations.add(Arrays.asList(0,0));
 
-        try {
-            List<String> listMovements = Files.readAllLines(Path.of("inputData.txt"));
+        List<String> listMovements = Files.readAllLines(Path.of("inputData.txt"));
 
-           for (String Movement: listMovements) {
-               String Direction = Movement.split(" " )[0];
-               int Distance = Integer.parseInt(Movement.split(" ")[1]);
+        for (String Movement: listMovements) {
+            String Direction = Movement.split(" " )[0];
+            int Distance = Integer.parseInt(Movement.split(" ")[1]);
 
-               while (Distance > 0) {
-                   switch (Direction) {
-                       case "U":
-                           headLocation.set(0, (headLocation.get(0) + 1));
-                           break;
-                       case "R":
-                           headLocation.set(1, (headLocation.get(1) + 1));
-                           break;
-                       case "D":
-                           headLocation.set(0, (headLocation.get(0) - 1));
-                           break;
-                       case "L":
-                           headLocation.set(1, (headLocation.get(1) - 1));
-                           break;
-                       default:
-                           System.out.println("ERROR: DEFAULT SWITCH GATE HIT - " + Direction + " - " + Distance);
-                   }
+            while (Distance > 0) {
+                switch (Direction) {
+                    case "U":
+                        headLocation.set(0, (headLocation.get(0) + 1));
+                        break;
+                    case "R":
+                        headLocation.set(1, (headLocation.get(1) + 1));
+                        break;
+                    case "D":
+                        headLocation.set(0, (headLocation.get(0) - 1));
+                        break;
+                    case "L":
+                        headLocation.set(1, (headLocation.get(1) - 1));
+                        break;
+                    default:
+                        System.out.println("ERROR: DEFAULT SWITCH GATE HIT - " + Direction + " - " + Distance);
+                }
 
-                   tailLocation = tailMove(headLocation.get(0), headLocation.get(1), tailLocation.get(0), tailLocation.get(1));
-                   VisitedLocations.add(Arrays.asList(tailLocation.get(0), tailLocation.get(1)));
-                   Distance--;
-               }
-           }
-
-           System.out.println("The answer is: " + VisitedLocations.size());
-        } catch (IOException e) {
-            e.printStackTrace();
+                tailLocation = tailMove(headLocation.get(0), headLocation.get(1), tailLocation.get(0), tailLocation.get(1));
+                VisitedLocations.add(Arrays.asList(tailLocation.get(0), tailLocation.get(1)));
+                Distance--;
+            }
         }
+
+        System.out.println("The answer is: " + VisitedLocations.size());
     }
 
     private static List<Integer> tailMove(int headLocationY, int headLocationX, int tailLocationY, int tailLocationX) {
