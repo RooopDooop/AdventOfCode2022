@@ -12,33 +12,32 @@ class CPU {
         SignalHistory.put(currentCycle, XValue);
     }
 
+    public void DrawScreen() {
+        for (Integer signal : this.SignalHistory.values()) {
+            this.objCRT.insertRow(signal);
+        }
+
+        this.objCRT.DrawScreen();
+    }
+
     public void addNoop() {
         currentCycle++;
         SignalHistory.put(currentCycle, XValue);
-        objCRT.insertRow(this.SignalHistory.get(currentCycle));
+        //objCRT.insertRow(this.SignalHistory.get(currentCycle));
     }
 
     public void addX(int X) {
         for (int i = 1; i < 3; i++) {
             currentCycle++;
             SignalHistory.put(currentCycle, XValue);
-            objCRT.insertRow(this.SignalHistory.get(currentCycle));
+            //objCRT.insertRow(this.SignalHistory.get(currentCycle));
         }
 
         XValue += X;
     }
 
-    public int calculateSum() {
-        int sumNumber = 0;
-
-        sumNumber += 20 * this.SignalHistory.get(20);
-        sumNumber += 60 * this.SignalHistory.get(60);
-        sumNumber += 100 * this.SignalHistory.get(100);
-        sumNumber += 140 * this.SignalHistory.get(140);
-        sumNumber += 180 * this.SignalHistory.get(180);
-        sumNumber += 220 * this.SignalHistory.get(220);
-
-        return sumNumber;
+    public int fetchFrame(int targetFrame) {
+        return targetFrame * this.SignalHistory.get(targetFrame);
     }
 }
 
@@ -46,28 +45,16 @@ class CRT {
     //Start from left to right
     //String[][] Screen = new String[6][40];
 
-    List<String> ScreenOne = new ArrayList<>();
-    List<String> ScreenTwo = new ArrayList<>();
-    List<String> ScreenThree = new ArrayList<>();
-    List<String> ScreenFour = new ArrayList<>();
-    List<String> ScreenFive = new ArrayList<>();
-    List<String> ScreenSix = new ArrayList<>();
+    List<String> Screen = new ArrayList<>();
 
     public void insertRow(int XValue) {
-        if (ScreenOne.size() < 40) {
+        String value = ".";
 
-        } else if (ScreenTwo.size() < 80) {
-
-        } else if (ScreenThree.size() < 120) {
-
-        } else if (ScreenFour.size() < 160) {
-
-        } else if (ScreenFive.size() < 200) {
-
-        } else if (ScreenSix.size() < 240) {
-
+        if (XValue == (this.Screen.size()-1) || XValue+1 == (this.Screen.size()-1) || XValue+2 == (this.Screen.size()-1)) {
+            value = "#";
         }
 
+        this.Screen.add(value);
 
         /*for (int drawn = 0; drawn < XValue; drawn++) {
             if (drawn == XValue - 1) {
@@ -85,13 +72,19 @@ class CRT {
     }
 
     public void DrawScreen() {
-        //System.out.println(Screen);
-        /*for (String[] row : Screen) {
-            for (String pixel : row) {
-                System.out.print(pixel);
+        int cycle = 1;
+        for (String pixel : this.Screen) {
+            //this.objCRT.insertRow(signal);
+            System.out.print(pixel);
+
+            if (cycle == 40 || cycle == 80 || cycle == 120 || cycle == 160 || cycle == 200 || cycle == 240) {
+                System.out.println();
             }
-            System.out.println();
-        }*/
+
+            cycle++;
+        }
+
+        System.out.println(this.Screen);
     }
 }
 
@@ -108,6 +101,8 @@ class TenTwo {
                 objCPU.addX(X);
             }
         }
+
+        objCPU.DrawScreen();
 
         /*System.out.println(objCPU.SignalHistory);
         System.out.println(objCPU.calculateSum());*/
